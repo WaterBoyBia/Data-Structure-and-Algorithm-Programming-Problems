@@ -1,0 +1,91 @@
+9: 循环队列
+描述
+请你实现一个循环队列，该循环队列可利用的空间大小等于n个int型变量的大小。
+操作：
+push x：将x加入到循环队列尾端。若循环队列已满，输出"full"(不含引号)，否则不输出任何内容。保证x为int型整数。
+front：输出队首元素，队首不出队。若队列为空，输出"empty"(不含引号)。
+pop：输出队首元素，且队首出队。若队列为空，输出"empty"(不含引号)
+
+输入
+第一行输入两个整数n,q (1≤n,q≤105)，表示循环队列可利用的空间大小和操作次数。
+接下来的q行，每行一个字符串，表示一个操作。保证操作是题目描述中的一种
+
+输出
+按照题目描述中的要求输出
+
+输入输出样例
+输入
+
+3 10
+push 1
+push 2
+front
+push 3
+push 4
+pop
+pop
+pop
+front
+pop
+输出
+
+1
+full
+1
+2
+3
+empty
+empty
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int size;
+    int op_cnt;
+    scanf("%d %d", &size, &op_cnt);
+    int q[size];
+    int front = 0;
+    int rear = 0;
+    int q_size = 0;
+    for (int i = 0; i < op_cnt; i ++) {
+        char op[6];
+        scanf("%s", op);
+        if (strcmp(op, "push") == 0) {
+            int data;
+            scanf("%d", &data);
+            if (q_size == size) {
+                printf("full\n");
+            } else {
+                q[rear % size] = data;
+                rear ++;
+                q_size ++;
+            }
+        } else if (strcmp(op, "pop") == 0) {
+            if (q_size == 0) {
+                printf("empty\n");
+            } else {
+                printf("%d\n", q[front%size]);
+                front ++;
+                q_size --;
+            }
+        } else if (strcmp(op, "front") == 0) {
+            if (q_size == 0) {
+                printf("empty\n");
+            } else {
+                printf("%d\n", q[front%size]);
+            }
+        } else {
+            printf("unexpected\n");
+        }
+    }
+    return 0;
+}

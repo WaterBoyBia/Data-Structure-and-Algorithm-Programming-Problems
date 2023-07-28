@@ -1,0 +1,65 @@
+4: 点击消除
+描述
+给定一个字符串，每次“点击”，可以把字符串中相邻两个相同字母消除，例如，字符串"abbc"点击后可以生成"ac"。但相同而不相邻、不相同的相邻字母都是不可以被消除的。
+通过点击足够多次之后可以把字符串变得尽可能短，编程实现输出给定字符串足够多次点击后的最终形态。
+
+输入
+一个字符串，仅由小写字母组成。（字符串长度不大于10000）
+
+输出
+一个字符串，为“点击消除”后的最终形态。若最终的字符串为空串，则输出0。
+
+输入输出样例
+输入
+
+abbc
+输出
+
+ac
+
+
+
+
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+// 辅助栈
+stack<char> stk;
+string str;
+
+int main() {
+    cin >> str;
+    int lenStr = str.size();
+    
+    stk.push(str[0]); // 先把第一个字符压入栈中
+    for (int i = 1; i < lenStr; ++i) {
+        // 栈空，就要先压入栈,若栈不空则判断。。。
+        if (stk.empty()) stk.push(str[i]);
+        else if (str[i] != stk.top()) {
+            // 若当前指针指向的元素不等于栈顶元素，说明不匹配，就先压入栈，若匹配就消掉
+            stk.push(str[i]);
+        }else {
+            stk.pop();
+        }
+    }
+    // 最终，若栈为空，就输出0，否则要从栈底打印到栈顶，就要多加一步操作了
+    if (stk.empty()) cout << '0' << endl;
+    else {
+        vector<char> res; // 最终存储的结果
+        while (!stk.empty()) {
+            // 若栈不空
+            res.push_back(stk.top());
+            stk.pop();
+        }
+        int lenRes = res.size();
+        for (int i = lenRes - 1; i >= 0; --i) {
+            cout << res[i];
+        }
+        cout << endl;
+    }
+    
+    return 0;
+}

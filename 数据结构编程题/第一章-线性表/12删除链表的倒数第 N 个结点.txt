@@ -1,0 +1,105 @@
+12: 删除链表的倒数第 N 个结点
+描述
+给你一个链表，删除链表的倒数第 n 个结点，并且返回链表的头结点。
+输入
+输入链表和要删除的n ，链表中结点的数目为 sz，
+1 <= sz <= 30，0 <= Node.val <= 100，1 <= n <= sz
+-1表示链表结束符
+输出
+输出链表
+输入样例
+
+1 2 3 4 5 -1
+2
+输出样例
+
+1 2 3 5
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+struct ListNode
+{
+    int val;
+    struct ListNode *next;
+    
+};
+
+struct ListNode *creat()  
+{
+    struct ListNode *head, *p1, *p2;
+    p1 = p2 = (struct ListNode*)malloc(sizeof(struct ListNode));
+    char c;
+    scanf("%d",&p1->val);
+    head=NULL;
+    int n=0;
+    while(p1->val!=-1)        
+    {
+        n=n+1;
+        if(n==1)
+            head=p1;           
+        else
+            p2->next=p1;               
+        p2=p1;
+        p1=(struct ListNode*)malloc(sizeof(struct ListNode));
+        scanf("%d",&p1->val);
+    }                         
+    p2->next=NULL;
+    return(head);
+}
+
+void print(struct ListNode *head)
+{
+    struct ListNode *p = head;
+    while(p != NULL)
+    {
+        printf("%d ",p->val);
+        p=p->next;
+    }
+    printf("\n");
+}
+
+struct ListNode* DeleteNthToTail(struct ListNode* head, int n)
+{
+	struct ListNode *a, *b, *c;
+	a=b=c=(struct ListNode*)malloc(sizeof(struct ListNode));
+	a=NULL;
+	b=c=head;
+	
+	while (n--){
+		if(c==NULL) return NULL;
+		c = c->next;
+	}
+	while (c)
+	{
+		a = b;
+		b = b->next;
+		c = c->next;
+	}
+	int e;
+	struct ListNode *temp;  
+	temp = (struct ListNode*)malloc(sizeof(struct ListNode));    
+	temp = a->next;
+	a->next = b->next;
+	e = b->val;
+	free(temp);
+	return head;
+}
+int main()
+{
+	struct ListNode *p;
+	p = creat();
+	int k;
+	scanf("%d",&k);
+	p = DeleteNthToTail(p,k);
+	print(p);
+	return 0;
+}

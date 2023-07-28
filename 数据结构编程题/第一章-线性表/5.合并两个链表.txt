@@ -1,0 +1,121 @@
+5: 合并两个链表
+描述
+给你两个链表 list1 和 list2 ，它们包含的元素分别为 n 个和 m 个。
+请你将 list1 中下标从 a 到 b 的全部节点都删除，并将list2 接在被删除节点的位置。
+输入
+3 <= list1.length <= 10^4
+1 <= a <= b < list1.length - 1
+1 <= list2.length <= 10^4
+-1作为链表结束符
+输出
+输出链表
+输入样例
+
+0 1 2 3 4 5 -1 
+3 
+4 
+1000000 1000001 1000002 -1 
+输出样例
+
+0 1 2 1000000 1000001 1000002 5
+
+
+
+
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+struct ListNode
+{
+    int val;
+    struct ListNode *next;
+    
+};
+
+struct ListNode *creat()  
+{
+    struct ListNode *head, *p1, *p2;
+    p1 = p2 = (struct ListNode*)malloc(sizeof(struct ListNode));
+    char c;
+    scanf("%d",&p1->val);
+    head=NULL;
+    int n=0;
+    while(p1->val!=-1)    
+    {
+        n=n+1;
+        if(n==1)                
+            head=p1;           
+        else                    
+            p2->next=p1;              
+        p2=p1;
+        p1=(struct ListNode*)malloc(sizeof(struct ListNode));
+        scanf("%d",&p1->val);
+
+    }                         
+    p2->next=NULL;
+    return(head);
+}
+
+void print(struct ListNode *head) 
+{
+    struct ListNode *p = head;
+    while(p != NULL)
+    {
+        printf("%d ",p->val);
+        p=p->next;
+    }
+    printf("\n");
+}
+struct ListNode* MergeInBetween(struct ListNode *list1,struct ListNode *list2,int a,int b){
+	if(list1 == NULL)
+            return NULL;
+        ListNode* list1FreeHead = list1;
+        ListNode* list1FreeTail = list1;
+        ListNode* list1Link = NULL;
+        while(a--)//寻找断开的首节点
+        {
+            list1Link = list1FreeHead;
+            list1FreeHead = list1FreeHead->next;
+        }
+        ListNode* list1Break = NULL;
+        for(int i = 0; i <= b; ++i)//寻找断开的尾节点
+        {
+            list1Break = list1FreeTail;
+            list1FreeTail = list1FreeTail->next;
+        }
+        list1Break->next = NULL;
+        while(list1FreeHead != NULL)//释放节点，避免内存泄漏
+        {
+            ListNode* tmp = list1FreeHead;
+            list1FreeHead = list1FreeHead->next;
+            delete tmp;
+        }
+        list1Link->next = list2;//list1链接上list2的头节点
+        while(list2 != NULL)//寻找list尾节点
+        {
+            if(list2->next == NULL)
+                break;
+            list2 = list2->next;
+        }
+        list2->next = list1FreeTail;//list2的尾链接上释放节点的尾
+        return list1;//返回
+    }
+
+
+
+
+int main()
+{
+	struct ListNode *l1,*l2,*l3;
+    l1 = creat();
+    int a,b;
+    scanf("%d %d",&a,&b);
+    l2 = creat();
+    l3 = MergeInBetween(l1,l2,a,b);
+    print(l3);
+    return 0;
+}

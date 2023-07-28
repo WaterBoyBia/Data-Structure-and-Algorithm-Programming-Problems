@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+#define max(a,b) ((a)>(b)?(a):(b))
+//找到中间点断开，将后半段链表反转，然后按顺序交叉合并两个链表 
+
+struct ListNode
+{
+    int val;
+    struct ListNode *next;
+    
+};
+
+struct ListNode *creat()   //指针函数
+{
+    struct ListNode *head, *p1, *p2;
+    p1 = p2 = (struct ListNode*)malloc(sizeof(struct ListNode));//分配内存返回地址 
+    char c;
+    scanf("%d",&p1->val);
+    head=NULL;
+    int n=0;
+    while(p1->val!=-1)         //-1输入结束
+    {
+        n=n+1;
+        if(n==1)                
+            head=p1;            //第一个，置头指针
+        else                    //第二个数据后 
+            p2->next=p1;               //新开结点接上
+        p2=p1;
+        p1=(struct ListNode*)malloc(sizeof(struct ListNode));
+        scanf("%d",&p1->val);
+
+    }                         //p1指向新开结点，p2指向最后结点
+    p2->next=NULL;
+    return(head);
+}
+
+void print(struct ListNode *head)//输出 
+{
+    struct ListNode *p = head;
+    while(p != NULL)
+    {
+        printf("%d ",p->val);
+        p=p->next;
+    }
+    printf("\n");
+}
+
+struct ListNode * reverse(struct ListNode*head)
+{
+	if(!head || !head->next) return head;
+        struct ListNode *prev = NULL, *cur = head, *next = NULL;
+        while(cur)
+        {
+            next = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = next;
+        }
+        return prev;
+}
+
+struct ListNode * Rearrange(struct ListNode*head)
+{
+	struct ListNode *fast, *slow, *pre;
+	fast = slow = head;
+	pre = NULL;
+	while(fast && fast->next)
+    {
+        fast = fast->next->next;   //快指针移动是慢指针两倍，快指针到结尾，慢指针到中间 
+        pre = slow;
+        slow = slow->next;
+    }
+    pre->next = NULL;//断开前后半段 
+    struct ListNode *end =reverse(slow);
+    struct ListNode *temp1, *temp2;
+    temp1 = head;
+    temp2 = end;
+	/struct ListNode *cur1, *cur2;
+    while(temp1->next!=NULL){
+   // cur1=cur2=(struct ListNode*)malloc(sizeof(struct ListNode));
+    struct ListNode *cur1, *cur2;
+    	cur1 = temp1->next;
+    	cur2 = temp2->next;
+    	temp1->next = temp2;
+    	temp2->next = cur1;
+    	temp2 = cur2;
+    	temp1 = cur1;
+	}
+	//后半段可能会多出来 
+/*	if(temp2!=NULL){
+		temp1->next = temp2;
+		temp2 = temp2->next;
+	}*/
+	temp1->next = temp2;
+	while (temp2!=NULL){
+			if(temp2->next == NULL)
+                break;
+            temp2 = temp2->next;
+		}
+	return head;
+}
+int main()
+{
+	struct ListNode *head;
+	head = creat();
+	head = Rearrange(head);
+	print(head);
+	return 0;
+}

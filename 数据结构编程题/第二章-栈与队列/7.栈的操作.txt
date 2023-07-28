@@ -1,0 +1,121 @@
+7: 栈的操作
+描述
+请你实现一个栈。
+可以完成操作：
+push x：将 x入栈，保证 x为 int 型整数。
+pop：输出栈顶，并让栈顶出栈
+top：输出栈顶，栈顶不出栈
+
+输入
+第一行为一个正整数 n，代表操作次数。(1≤n≤10000)
+接下来的 n行 ，每行为一个字符串，代表一个操作。保证操作是题目描述中三种中的一种。
+
+输出
+如果操作为push，则不输出任何东西。
+如果为另外两种，若栈为空，则输出 "error“
+否则按对应操作输出。
+
+输入输出样例
+输入
+
+6
+push 1
+pop
+top
+push 2
+push 3
+pop
+输出
+
+1
+error
+3
+
+
+
+
+
+
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>//使用bool型
+#include<string.h>
+#include<ctype.h>
+#define MAXSIZE 100000
+#define Elemtype int
+ 
+ 
+typedef struct SqStack 
+{
+	int data[MAXSIZE];//存放栈中元素
+	int top;//栈顶指针
+}SqStack;
+ 
+//初始化函数
+void InitStack(SqStack *S) //*S表示栈的什么呢？
+{
+	S->top= -1;
+}
+ 
+ 
+//进栈
+bool Push(SqStack* S, int x)
+{
+	if (S->top == MAXSIZE - 1)
+		return false;
+	else
+		S->data[++S->top] = x;
+	return true;
+}
+ 
+//出栈
+int Pop(SqStack* S) {
+	if (S->top == -1)
+		return -1;
+	else
+	{
+		return S->data[S->top--];
+	}
+	return 0;
+}
+ 
+int main()
+{
+	int n=0;//操作次数
+	SqStack *S=(SqStack *)malloc(sizeof(SqStack));
+	InitStack(S);//初始化栈
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		char str[5] = { 0 };
+		int e;
+		scanf("%s", str);
+	if (strcmp(str, "push") == 0){
+	
+          
+			scanf("%d", &e);
+			Push(S, e);
+		}
+		else if (strcmp(str, "pop") == 0)
+		{
+			if (S->top == -1)
+				printf("error\n");
+			else {
+				
+				printf( "%d\n",Pop(S) );
+			}
+			
+		}
+		else if (strcmp(str, "top") == 0)
+		{
+			if (S->top == -1)
+				printf("error\n");
+			else
+				printf("%d\n", S->data[S->top]);
+		}
+	}
+	return 0;
+}
